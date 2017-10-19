@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation=
+		"http://www.springframework.org/schema/beans 
+		 http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		 http://www.springframework.org/schema/context 
+		 http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		 http://www.springframework.org/schema/tx 
+		 http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<!-- annotation을 활용한 방법 -->
+	<!-- xmlns:tx, 스키마에 tx추가 -->
+	<!-- <context:component-scan base-package="controllers"></context:component-scan> -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+		
+	<!-- 데이터  서비스를 위한 설정 -->
+	
+	<!-- <bean name="template" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean> -->
+	
+	<bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></property>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"></property>
+		<property name="username" value="seo"></property>
+		<property name="password" value="seo2017"></property>
+	</bean>
+	
+	<!-- 트랜젝션 관리 2 트랜젝션 템플릿을 활용하는 방법 -->
+	<!-- <bean name="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>	
+	</bean>
+	
+	<bean name="transactionTemplate"
+		class="org.springframework.transaction.support.TransactionTemplate">
+		<property name="transactionManager" ref="transactionManager"></property>	
+	</bean> -->
+	
+	<!-- 트랜젝션 관리 1 트랜젝션 매니저, PlatformTransactionManager를 활용한 방식 -->
+	<!-- <bean name="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>	
+		<property name="transactionManager" ref="transactionManager"></property>
+	</bean> -->
+	
+	<!-- 객체와 객체를 주입 injection -->
+	<!-- 고전적 주입방식 1~5강 -->
+ 	<!-- 게시판 목록 정보를 주입받을 bean -->
+	<!-- <bean name="/customer/notice.htm" class="controller.customer.NoticeController">
+		<property name="noticeDao" ref="noticeDao"></property>
+	</bean>
+	
+	게시판 상세정보를 주입받을 bean
+	<bean name="/customer/noticeDetail.htm" class="controller.customer.NoticeDetailController">
+		<property name="noticeDao" ref="noticeDao"></property>
+	</bean> -->
+		
+	<bean name="noticeDao" class="dao.NewlectNoticeDao">
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- <property name="transactionTemplate" ref="transactionTemplate"></property> -->
+	</bean>
+	
+	<bean name="memberDao" class="dao.NewlectMemberDao">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<!-- 트랜젝션 관리 3 - AOP를 활용한 트랜젝션 처리방식 -->
+	<!-- 프록시(가짜로 가로챌 클래스) : 주업무 빈의 이름을 가져다가 쓴다. -->
+	<!-- <bean name="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>	
+	</bean>
+	<bean name="transactionTemplate"
+		class="org.springframework.transaction.support.TransactionTemplate">
+		<property name="transactionManager" ref="transactionManager"></property>	
+	</bean>
+
+	프록시(가짜로 가로챌 클래스) Bean : 주업무 빈의 이름을 가져다가 쓴다.
+	<bean name="noticeDao" 
+		class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target" ref="noticeDaoImp"></property>
+		<property name="interceptorNames">
+			<list>
+				<value>transactionInterceptor</value>
+			</list>
+		</property>
+		
+	</bean>
+		<bean name="transactionInterceptor" 
+		class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager" ref="transactionManager"></property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="insertAndPointUpOfMember"></prop>
+			</props>
+		</property>
+	</bean>	 -->
+	
+	<!-- 트랜젝션 관리 4 - annotation를 활용한 트랜젝션 처리방식 : xml을 활용하지 않고 트랜젝션 관리 -->
+	<bean name="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>	
+	</bean>
+	
+</beans>

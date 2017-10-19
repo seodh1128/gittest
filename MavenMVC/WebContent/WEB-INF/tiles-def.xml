@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+<!-- 페이지를 조립하기 위한 설정 : 각 파츠들에 대한 재료들을 설정한다. : 배치나 설정은 layout.jsp에서 진행한다. -->
+
+
+
+<!-- 하위 디렉토리가 없는 경우만 캐치 -->
+<!-- * 하나만 두게 되면 아래로 안내려가게 되므로, 다른 내용도 같이 추가시켜서 특정성을 부여한다 -->
+  <definition name="home.*" template="/WEB-INF/views/inc/layout.jsp">
+    <put-attribute name="title" value="뉴렉쳐 사이트에 오신 것을 환영합니다." />
+    <put-attribute name="css" value="{1}.css" />
+    <put-attribute name="header" value="/WEB-INF/views/inc/header.jsp" />
+    <put-attribute name="footer" value="/WEB-INF/views/inc/footer.jsp" />
+    <put-attribute name="content" value="/WEB-INF/views/{1}.jsp" />
+  </definition>
+
+<!-- 하위 디렉토리가 있는 경우 -->
+<!-- * 의 개수대로 {1}, {2}, {3} ... -->  
+  <definition name="*.*" template="/WEB-INF/views/{1}/inc/layout.jsp">
+    <put-attribute name="title" value="뉴렉쳐 사이트에 오신 것을 환영합니다." />
+    <put-attribute name="css" value="{2}.css" />
+    <put-attribute name="header" value="/WEB-INF/views/inc/header.jsp" />
+    <put-attribute name="footer" value="/WEB-INF/views/inc/footer.jsp" />
+    <put-attribute name="visual" value="/WEB-INF/views/{1}/inc/visual.jsp" />
+    <put-attribute name="aside" value="/WEB-INF/views/{1}/inc/navi.jsp" />
+    <put-attribute name="content" value="/WEB-INF/views/{1}/{2}.jsp" />
+  </definition>
+  
+</tiles-definitions>

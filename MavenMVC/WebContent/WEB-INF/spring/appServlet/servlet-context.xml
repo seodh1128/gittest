@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+              http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    		  http://www.springframework.org/schema/tx
+              http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+              http://www.springframework.org/schema/context
+              http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+	
+	
+	<!-- annotation을 활용한 방법 -->
+	<context:component-scan base-package="controllers"></context:component-scan>
+	<!-- context:component-scan을 만나면 해당 package를 기반으로 @주석처리된 해당 내용들을 검색한다. -->
+	
+	
+	<!-- 서블릿 관련 설정 -->
+	
+	
+	
+	<!-- tiles에 요청하기 위한 설정 세팅 -->
+	<!-- 파일이 아닌 tiles-def에 설정해둔 설정명이므로 리솔버를 설정해줘야 한다. -->
+	<!-- tiles의 설정파일이 어디있는지 경로를 설정해두는 bean -->
+	<bean id="tilesConfigurer"
+		class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+		<property name="definitions" value="/WEB-INF/tiles-def.xml"	></property>
+	</bean>
+	<!-- tiles 리솔버 관련 설정 -->
+	<bean id="tilesViewResolver"
+		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView" ></property>
+	</bean>
+	<!-- tiles 리솔버를 못찾을 경우, internalResourceResolver를 찾는다. -->
+	<bean 
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- 컨트롤러에서 확장자를 붙이지 않는 정책을 사용할 경우, 여기에 확장자를 기재함으로써 확장자를 붙여서 연결해준다. -->
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	
+	<!-- 멀티파츠를 사용하기 위한 리솔버 관련 설정 -->
+	<bean name="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="10000000"	></property>
+	</bean>
+</beans>
